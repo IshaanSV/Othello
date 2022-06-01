@@ -45,6 +45,7 @@ public class Othello implements ActionListener, MouseListener {
 	final int BLANK = 0;
 	final int BLACK = 1;
 	final int WHITE = 2;
+	int turn = 1;
 	
 	
 	public Othello() {
@@ -111,6 +112,22 @@ public class Othello implements ActionListener, MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		int xPos = e.getX()/100;
+		int yPos = e.getY()/100;
+		if(xPos == 8) {
+			xPos--;
+		}
+		if(yPos == 8) {
+			yPos--;
+		}
+		if(board[xPos][yPos] == BLANK) {
+			if(turn%2 == 0) {
+				board[xPos][yPos] = WHITE;
+			}
+			else {
+				board[xPos][yPos] = BLACK;
+			}
+		}
 		
 	}
 
