@@ -18,13 +18,15 @@ import javax.swing.JTextField;
 
 public class Othello implements ActionListener, MouseListener {
 	JFrame frame = new JFrame();
-	String blackWinsStr = "Black Wins: 0";
-	String whiteStr = "White Wins: 0";
+	String blackStr = "Black Wins: ";
+	String whiteStr = "White Wins: ";
+	JButton whiteNameChange = new JButton("Change White's Name:");
+	JButton blackNameChange = new JButton("Change Black's Name:");
 	BoardPanel panel = new BoardPanel();
-	JLabel blackWins = new JLabel(blackWinsStr);
-	JLabel whiteWins = new JLabel(whiteStr);
 	int blackWinCount = 0;
 	int whiteWinCount = 0;
+	JLabel blackWins = new JLabel(blackStr + blackWinCount);
+	JLabel whiteWins = new JLabel(whiteStr + whiteWinCount);
 	JTextField blackNameTX = new JTextField();
 	JTextField whiteNameTX = new JTextField();
 	JButton resetBoard = new JButton("Reset Board");
@@ -41,7 +43,7 @@ public class Othello implements ActionListener, MouseListener {
 	JPanel east = new JPanel();
 	Font font1 = new Font("Verdana", Font.PLAIN,30);
 	Font font2 = new Font("Verdana", Font.PLAIN, 20);
-	int[][] board = new int[8][8];
+
 	final int BLANK = 0;
 	final int BLACK = 1;
 	final int WHITE = 2;
@@ -90,6 +92,7 @@ public class Othello implements ActionListener, MouseListener {
 		frame.setVisible(true);
 		System.out.println("width: "+panel.getWidth());
 		System.out.println("height: "+panel.getHeight());
+		frame.addMouseListener(this);
 	}
 	
 	public static void main(String[] args) {
@@ -112,23 +115,39 @@ public class Othello implements ActionListener, MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		int xPos = e.getX()/100;
-		int yPos = e.getY()/100;
-		if(xPos == 8) {
-			xPos--;
-		}
-		if(yPos == 8) {
-			yPos--;
-		}
-		if(board[xPos][yPos] == BLANK) {
-			if(turn%2 == 0) {
-				board[xPos][yPos] = WHITE;
+		//panel coords: 205 x, 130 y, 925 x, 850 y
+		System.out.println("working1");
+		int x = e.getX();
+		int y = e.getY();
+		if(205<= x && 925 >= x && 130 <= y && 850 >= y) {
+			System.out.println("working2");
+			int xIndex = (x-205)/90;
+			int yIndex = (y-130)/90;
+			if(panel.board[xIndex][yIndex] == BLANK) {
+				System.out.println("Working3");
+				if(turn %2 == 1) {
+					System.out.println("Working4");
+					System.out.println("isValid: " + panel.isValid(BLACK,xIndex,yIndex));
+					if(panel.isValid(BLACK,xIndex,yIndex)) {
+						System.out.println("Working5");
+
+						panel.board[xIndex][yIndex] = BLACK;
+						panel.doMove(BLACK, xIndex, yIndex);
+					}
+				}
+				else {
+					System.out.println("Working4");
+					if(panel.isValid(WHITE,xIndex,yIndex)) {
+						System.out.println("Working5");
+						panel.board[xIndex][yIndex] = WHITE;
+						panel.doMove(WHITE, xIndex, yIndex);
+					}
+				}
+				turn++;
+				panel.turn++;
+				frame.repaint();
 			}
-			else {
-				board[xPos][yPos] = BLACK;
-			}
 		}
-		
 	}
 
 	@Override
