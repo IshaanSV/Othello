@@ -19,6 +19,8 @@ int blackWinCount = 0;
 int whiteWinCount = 0;
 JLabel blackNm = new JLabel("Black Name: ");
 JLabel whiteNm = new JLabel("White Name: ");
+JLabel blackWins = new JLabel(blackStr + blackWinCount);
+JLabel whiteWins = new JLabel(whiteStr + whiteWinCount);
 
 public BoardPanel() {
 super();
@@ -64,6 +66,8 @@ board[3][3] = BLACK;
 board[4][4] = BLACK;
 board[3][4] = WHITE;
 board[4][3] = WHITE;
+blackWins.setText(blackStr + blackWinCount);
+whiteWins.setText(whiteStr + whiteWinCount);
 }
 
 public void restartMatch() {
@@ -82,6 +86,8 @@ whiteWinCount = 0;
 blackNm.setText(blackStr+ blackWinCount);
 whiteNm.setText(whiteStr+whiteWinCount);
 }
+
+
 
 public boolean isValid(int player, int xIndex, int yIndex) {
 	int oppositePlayer;

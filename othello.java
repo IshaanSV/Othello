@@ -19,6 +19,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -200,9 +201,63 @@ public class othello implements ActionListener, MouseListener {
 			whiteNm.setText(newWhiteName + " Name: ");
 		
 		}
+		
+				
+				
 	
 	}
-
-
-
+	public void endTurn(){
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board.length; j++) {
+				int player = turn%2;
+				int oppositePlayer;
+				if(player == 0){
+					player = 2;
+				}
+				if(player == 2) {
+					oppositePlayer = 1;
+				}else {
+					oppositePlayer= 2;
+				}
+				if(panel.isValid(player,i,j)) {
+					JOptionPane.showMessageDialog(frame, "There is a vaild move");
+					return;
+				}else if(panel.isValid(oppositePlayer,i,j)) {
+					turn++;
+					panel.turn++;
+					if(turn%2 == 1) {
+						turn2.setText("Black");
+					}else {
+						turn2.setText("White");
+					}
+					return;
+				}
+			}
+		}
+		int blacks = 0;
+		int whites = 0;
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board.length; j++) {
+				if(board[i][j] == BLACK) {
+					blacks++;
+				}else if(board[i][j] == WHITE) {
+					whites++;
+				}
+				if(whites>blacks) {
+					JOptionPane.showMessageDialog(frame, "White is the winner!");
+					whiteWinCount++;
+					whiteWins.setText(whiteStr+whiteWinCount);
+				}else {
+					JOptionPane.showMessageDialog(frame, "Black is the winner!");
+					blackWinCount++;
+					blackWins.setText(blackStr+blackWinCount);	
+				}
+			}
+		}
+		panel.resetBoard();
 }
+}
+
+
+
+
