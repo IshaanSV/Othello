@@ -1,3 +1,4 @@
+package Othello;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -50,7 +51,7 @@ public class Othello implements ActionListener, MouseListener {
 	
 	
 	public Othello() {
-		panel.setPreferredSize(new Dimension(800,800));
+		panel.setPreferredSize(new Dimension(800,800)); 
 		frame.setSize(1200,1200);
 		frame.setLayout(new BorderLayout());
 		frame.add(panel,BorderLayout.CENTER);
@@ -110,27 +111,21 @@ public class Othello implements ActionListener, MouseListener {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent e) {//registers the move and painting in the dots.
 		// TODO Auto-generated method stub
 		//panel coords: 205 x, 130 y, 925 x, 850 y
-		System.out.println("working1");
-		int x = e.getX();
+		int x = e.getX();//gets the position of where the user released their mouse
 		int y = e.getY();
-			System.out.println("working2");
 			int xIndex = x/90;
 			int yIndex = y/90;
 			if(panel.board[xIndex][yIndex] == BLANK) {
-				System.out.println("Working3");
 				if(turn %2 == 1) {
-					System.out.println("Working4");
 					System.out.println("isValid: " + panel.isValid(BLACK,xIndex,yIndex));
 					if(panel.isValid(BLACK,xIndex,yIndex)) {
-						System.out.println("Working5");
-
 						panel.board[xIndex][yIndex] = BLACK;
 						panel.doMove(BLACK, xIndex, yIndex);
-						turn++;
-						panel.turn++;
+						turn++;//changes turn
+						panel.turn++;//changes turn in boardpanel
 						if(turn%2 == 0) {
 							String[] whiteName2 = whiteStr.split(" ");
 							String whiteName3 = whiteName2[0];
@@ -144,7 +139,6 @@ public class Othello implements ActionListener, MouseListener {
 					}
 				}
 				else {
-					System.out.println("Working4");
 					if(panel.isValid(WHITE,xIndex,yIndex)) {
 						System.out.println("Working5");
 						panel.board[xIndex][yIndex] = WHITE;
@@ -185,7 +179,7 @@ public class Othello implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(resetBoard)) {
 			//reset board, turn =1, make middle black: (3,3)(4,4) white:(3,4)(4,3),
-			panel.resetBoard();
+			panel.resetBoard();//runs through the reset board method in BoardPanel
 			turn = 1;
 			panel.turn = 1;
 			if(turn%2 == 0) {
@@ -200,8 +194,8 @@ public class Othello implements ActionListener, MouseListener {
 			}
 			frame.repaint();
 		}
-		if(e.getSource().equals(restartMatch)) {
-			panel.restartMatch();
+		if(e.getSource().equals(restartMatch)) {//if the restart match button is clicked
+			panel.restartMatch();//runs through the restart board method in BoardPanel
 			blackWinCount = 0;
 			whiteWinCount = 0;
 			turn = 1;
@@ -216,28 +210,28 @@ public class Othello implements ActionListener, MouseListener {
 				String blackName3 = blackName2[0];
 				turn2.setText(blackName3);
 			}
-			frame.repaint();
+			frame.repaint();//repaints the frame
 		}
-		if(e.getSource().equals(blackNameChange)) {
+		if(e.getSource().equals(blackNameChange)) {//changes the name to what the user gives it instead of black
 			String newBlackName = blackNameTX.getText();
 			blackNameTX.setText("");
 			blackStr = (newBlackName + " Wins: ");
 			blackWins.setText(blackStr+blackWinCount);
 	
 		}
-		if(e.getSource().equals(whiteNameChange)) {
+		if(e.getSource().equals(whiteNameChange)) {//changes the name to what the user gives it instead of white
 			String newWhiteName = whiteNameTX.getText();
 			whiteNameTX.setText("");
 			whiteStr = (newWhiteName + " Wins: ");
 			whiteWins.setText(whiteStr+whiteWinCount);
 		
 		}
-		if(e.getSource().equals(endTurn)) {
+		if(e.getSource().equals(endTurn)) {//calls the end turn method and repaints the board.
 			endTurn();
 			frame.repaint();
 		}
 	}
-	public void endTurn(){
+	public void endTurn(){//method for endturn
 		int player = turn%2;
 		int oppositePlayer;
 		if(player == 0){
@@ -251,16 +245,14 @@ public class Othello implements ActionListener, MouseListener {
 		}
 		for (int i = 0; i < panel.board.length; i++) {
 			for (int j = 0; j < panel.board.length; j++) {
-				
-				System.out.println("i: " + i + "\t j: "+ j + "\t player: " + player);
-				System.out.println(panel.isValid(player,i,j));
-				if(panel.isValid(player,i,j)) {
+				if(panel.isValid(player,i,j)) {//The computer goes through the isValid method and if it sees a valid move, then it tells the person that there is valid move.
 					JOptionPane.showMessageDialog(frame, "There is a vaild move");
 					return;
 				}
 				
 			}
 		}
+		//The computer goes through the isValid method and if it sees that the opponent has a valid move, then it tells the person that there is valid move.
 		for (int i = 0; i < panel.board.length; i++) {
 			for (int j = 0; j < panel.board.length; j++) {
 				if(panel.isValid(oppositePlayer,i,j)) {
@@ -276,15 +268,16 @@ public class Othello implements ActionListener, MouseListener {
 			}
 		}
 		}
+		//if neither player has a valid move then the code counts up the amount of black and white dots and determines who has the most and who is the winner.
 		int blacks = 0;
 		int whites = 0;
 		for (int i = 0; i < panel.board.length-1; i++) {
 			for (int j = 0; j < panel.board.length; j++) {
 				if(panel.board[i][j] == BLACK) {
-					blacks++;
+					blacks++;//the count of the amount of black dots
 				}
 				else if(panel.board[i][j] == WHITE) {
-					whites++;
+					whites++;//the count of the amount of white dots
 				}
 				if(whites>blacks) {
 					panel.resetBoard();

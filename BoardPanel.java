@@ -1,3 +1,4 @@
+package Othello;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -14,13 +15,13 @@ public class BoardPanel extends JPanel {
 	
 	public BoardPanel() {
 		super();
-		board[3][4] = WHITE;
-		board[4][3] = WHITE;
-		board[3][3] = BLACK;
-		board[4][4] = BLACK;
+		board[3][4] = BLACK;//the default starting position in Othello.
+		board[4][3] = BLACK;
+		board[3][3] = WHITE;
+		board[4][4] = WHITE;
 	}
 	
-	public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {//does the painting of the dots and of the background of the grid.
 		super.paintComponent(g);
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
@@ -50,26 +51,26 @@ public class BoardPanel extends JPanel {
 	}
 	
 	public void resetBoard() {
-		turn = 1;
+		turn = 1;//sets the turn to black because the game starts with black turn
 		for(int i = 0; i<board.length; i++) {
-		for (int j = 0; j < board.length; j++) {
-		board[i][j] = 0;
+		for (int j = 0; j < board.length; j++) {//goes through the bboard
+		board[i][j] = 0;//sets everything to blank(removing all the black and white dots)
 		}
 		}
-		board[3][3] = BLACK;
+		board[3][3] = BLACK;//sets the board to the default/starting position
 		board[4][4] = BLACK;
 		board[3][4] = WHITE;
 		board[4][3] = WHITE;
 		}
 
 	public void restartMatch() {
-		turn = 1;
+		turn = 1;//sets the turn to black 
 		for(int i = 0; i<board.length; i++) {
-		for (int j = 0; j < board.length; j++) {
-		board[i][j] = 0;
+		for (int j = 0; j < board.length; j++) {//goes through the board
+		board[i][j] = 0;//sets everything to blank(removing all the black and white dots)
 		}
 		}
-		board[3][3] = BLACK;
+		board[3][3] = BLACK;//sets the board to the default/starting position
 		board[4][4] = BLACK;
 		board[3][4] = WHITE;
 		board[4][3] = WHITE;
@@ -111,7 +112,7 @@ public class BoardPanel extends JPanel {
 		return valid;
 	}
 	
-	public boolean doMove(int player, int xIndex, int yIndex) {
+	public boolean doMove(int player, int xIndex, int yIndex) {//checks if the move is vaild through isValid method and if it is it does the move 
 		boolean valid = false;
 		int oppositePlayer;
 		if(player == BLACK) {
@@ -120,11 +121,11 @@ public class BoardPanel extends JPanel {
 		else {
 			oppositePlayer = BLACK;
 		}
-		for(int i = -1; i <= 1; i++) {
+		for(int i = -1; i <= 1; i++) {//isValid: to see if the path the computer is taking is valid.
 			for(int j = -1; j <= 1; j++) {
 				boolean thisValid = false;
 				int multiplier = 1;
-				while(board[xIndex+i*multiplier][yIndex+j*multiplier] == oppositePlayer) {
+				while(board[xIndex+i*multiplier][yIndex+j*multiplier] == oppositePlayer) {//finds a valid path that changes the pieces on the path.
 					multiplier++;
 					if(board[xIndex+i*multiplier][yIndex+j*multiplier] == player) {
 						thisValid = true;
@@ -134,6 +135,7 @@ public class BoardPanel extends JPanel {
 				multiplier = 1;
 				while(thisValid == true && board[xIndex+i*multiplier][yIndex+j*multiplier] == oppositePlayer) {
 					board[xIndex+i*multiplier][yIndex+j*multiplier] = player;
+					multiplier++;//increments the multiplier
 				}
 			}
 		}
