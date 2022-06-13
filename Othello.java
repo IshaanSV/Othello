@@ -1,8 +1,3 @@
-/*Authors: Ayowade Owojori, Ishaan Varma
- * Date: 5/23/22
- * Purpose: Creates/Runs the game and has mouselistener 
- */
-package Othello;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -20,12 +15,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
+import javax.swing.JOptionPane;
 
 public class Othello implements ActionListener, MouseListener {
 	JFrame frame = new JFrame();
 	String blackStr = "Black Wins: ";
 	String whiteStr = "White Wins: ";
+	JButton whiteNameChange = new JButton("Change White's Name:");
+	JButton blackNameChange = new JButton("Change Black's Name:");
 	BoardPanel panel = new BoardPanel();
 	int blackWinCount = 0;
 	int whiteWinCount = 0;
@@ -35,25 +32,21 @@ public class Othello implements ActionListener, MouseListener {
 	JTextField whiteNameTX = new JTextField();
 	JButton resetBoard = new JButton("Reset Board");
 	JButton restartMatch = new JButton("Restart Match");
-	JButton whiteNameChange = new JButton("Change White Name");
-	JButton blackNameChange = new JButton("Change Black Name");
 	JLabel turnLbl = new JLabel("Turn: ");
 	JLabel turn2 = new JLabel("Black");
-	JLabel blackNm = new JLabel("Black Name: ");
-	JLabel whiteNm = new JLabel("White Name: ");
 	JButton endTurn = new JButton("End Turn/Game: ");
 	boolean move = true;
 	JPanel north = new JPanel();
 	JPanel west = new JPanel();
 	JPanel south = new JPanel();
 	JPanel east = new JPanel();
-	Font font1 = new Font("Verdana", Font.PLAIN,30);//changes font
+	Font font1 = new Font("Verdana", Font.PLAIN,30);
 	Font font2 = new Font("Verdana", Font.PLAIN, 20);
-	int[][] board = new int[8][8];// board array
+
 	final int BLANK = 0;
 	final int BLACK = 1;
 	final int WHITE = 2;
-	int  turn  = 1;
+	int turn = 1;
 	
 	
 	public Othello() {
@@ -73,12 +66,8 @@ public class Othello implements ActionListener, MouseListener {
 		resetBoard.addActionListener(this);
 		west.add(restartMatch);
 		restartMatch.addActionListener(this);
-
+		
 		south.setLayout(new GridLayout(3,3));
-		blackNm.setFont(font2);
-		whiteNm.setFont(font2);
-		south.add(blackNm);
-		south.add(whiteNm);
 		south.add(blackNameChange);
 		blackNameChange.addActionListener(this);
 		south.add(whiteNameChange);
@@ -98,10 +87,9 @@ public class Othello implements ActionListener, MouseListener {
 		frame.add(west,BorderLayout.WEST);
 		frame.add(south,BorderLayout.SOUTH);
 		frame.add(east,BorderLayout.EAST);
+		panel.addMouseListener(this);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		System.out.println("width: "+panel.getWidth());
-		System.out.println("height: "+panel.getHeight());
 	}
 	
 	public static void main(String[] args) {
@@ -124,22 +112,60 @@ public class Othello implements ActionListener, MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		int xPos = e.getX()/100;
-		int yPos = e.getY()/100;
-		if(xPos == 8) {
-			xPos--;
-		}
-		if(yPos == 8) {
-			yPos--;
-		}
-		if(board[xPos][yPos] == BLANK) {
-			if(turn%2 == 0) {
-				board[xPos][yPos] = WHITE;
+		//panel coords: 205 x, 130 y, 925 x, 850 y
+		System.out.println("working1");
+		int x = e.getX();
+		int y = e.getY();
+			System.out.println("working2");
+			int xIndex = x/90;
+			int yIndex = y/90;
+			if(panel.board[xIndex][yIndex] == BLANK) {
+				System.out.println("Working3");
+				if(turn %2 == 1) {
+					System.out.println("Working4");
+					System.out.println("isValid: " + panel.isValid(BLACK,xIndex,yIndex));
+					if(panel.isValid(BLACK,xIndex,yIndex)) {
+						System.out.println("Working5");
+
+						panel.board[xIndex][yIndex] = BLACK;
+						panel.doMove(BLACK, xIndex, yIndex);
+						turn++;
+						panel.turn++;
+						if(turn%2 == 0) {
+							String[] whiteName2 = whiteStr.split(" ");
+							String whiteName3 = whiteName2[0];
+							turn2.setText(whiteName3);
+						}
+						else {
+							String[] blackName2 = blackStr.split(" ");
+							String blackName3 = blackName2[0];
+							turn2.setText(blackName3);
+						}
+					}
+				}
+				else {
+					System.out.println("Working4");
+					if(panel.isValid(WHITE,xIndex,yIndex)) {
+						System.out.println("Working5");
+						panel.board[xIndex][yIndex] = WHITE;
+						panel.doMove(WHITE, xIndex, yIndex);
+						turn++;
+						panel.turn++;
+						if(turn%2 == 0) {
+							String[] whiteName2 = whiteStr.split(" ");
+							String whiteName3 = whiteName2[0];
+							turn2.setText(whiteName3);
+						}
+						else {
+							String[] blackName2 = blackStr.split(" ");
+							String blackName3 = blackName2[0];
+							turn2.setText(blackName3);
+						}
+					}
+				}
+
+				frame.repaint();
 			}
-			else {
-				board[xPos][yPos] = BLACK;
-			}
-		}
 	}
 
 	@Override
@@ -158,13 +184,38 @@ public class Othello implements ActionListener, MouseListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(resetBoard)) {
-			//reset board, turn =1, make middle black: (3,3)(4,4) white:(3,4)(4,3), 
+			//reset board, turn =1, make middle black: (3,3)(4,4) white:(3,4)(4,3),
 			panel.resetBoard();
+			turn = 1;
+			panel.turn = 1;
+			if(turn%2 == 0) {
+				String[] whiteName2 = whiteStr.split(" ");
+				String whiteName3 = whiteName2[0];
+				turn2.setText(whiteName3);
+			}
+			else {
+				String[] blackName2 = blackStr.split(" ");
+				String blackName3 = blackName2[0];
+				turn2.setText(blackName3);
+			}
 			frame.repaint();
 		}
-		
 		if(e.getSource().equals(restartMatch)) {
 			panel.restartMatch();
+			blackWinCount = 0;
+			whiteWinCount = 0;
+			turn = 1;
+			panel.turn = 1;
+			if(turn%2 == 0) {
+				String[] whiteName2 = whiteStr.split(" ");
+				String whiteName3 = whiteName2[0];
+				turn2.setText(whiteName3);
+			}
+			else {
+				String[] blackName2 = blackStr.split(" ");
+				String blackName3 = blackName2[0];
+				turn2.setText(blackName3);
+			}
 			frame.repaint();
 		}
 		if(e.getSource().equals(blackNameChange)) {
@@ -172,20 +223,85 @@ public class Othello implements ActionListener, MouseListener {
 			blackNameTX.setText("");
 			blackStr = (newBlackName + " Wins: ");
 			blackWins.setText(blackStr+blackWinCount);
-			blackNm.setText(newBlackName + " Name: ");
-			
+	
 		}
 		if(e.getSource().equals(whiteNameChange)) {
 			String newWhiteName = whiteNameTX.getText();
 			whiteNameTX.setText("");
 			whiteStr = (newWhiteName + " Wins: ");
 			whiteWins.setText(whiteStr+whiteWinCount);
-			whiteNm.setText(newWhiteName + " Name: ");
-			
+		
 		}
-			
+		if(e.getSource().equals(endTurn)) {
+			endTurn();
+			frame.repaint();
 		}
-	
-	
+	}
+	public void endTurn(){
+		int player = turn%2;
+		int oppositePlayer;
+		if(player == 0){
+			player = 2;
+		}
+		if(player == 2) {
+			oppositePlayer = 1;
+		}
+		else {
+			oppositePlayer= 2;
+		}
+		for (int i = 0; i < panel.board.length; i++) {
+			for (int j = 0; j < panel.board.length; j++) {
+				
+				System.out.println("i: " + i + "\t j: "+ j + "\t player: " + player);
+				System.out.println(panel.isValid(player,i,j));
+				if(panel.isValid(player,i,j)) {
+					JOptionPane.showMessageDialog(frame, "There is a vaild move");
+					return;
+				}
+				
+			}
+		}
+		for (int i = 0; i < panel.board.length; i++) {
+			for (int j = 0; j < panel.board.length; j++) {
+				if(panel.isValid(oppositePlayer,i,j)) {
+					turn++;
+					panel.turn++;
+					if(turn%2 == 1) {
+						turn2.setText("Black");
+					}
+					else {
+						turn2.setText("White");
+					}
+					return;
+			}
+		}
+		}
+		int blacks = 0;
+		int whites = 0;
+		for (int i = 0; i < panel.board.length-1; i++) {
+			for (int j = 0; j < panel.board.length; j++) {
+				if(panel.board[i][j] == BLACK) {
+					blacks++;
+				}
+				else if(panel.board[i][j] == WHITE) {
+					whites++;
+				}
+				if(whites>blacks) {
+					panel.resetBoard();
+					JOptionPane.showMessageDialog(frame, "White is the winner!");
+					whiteWinCount++;
+					whiteWins.setText(whiteStr+whiteWinCount);
+					return;
+				}else {
+					panel.resetBoard();
+					JOptionPane.showMessageDialog(frame, "Black is the winner!");
+					blackWinCount++;
+					blackWins.setText(blackStr+blackWinCount);
+					return;
 
+				}
+			}
+		}
+	System.out.println("");
+	}
 }
