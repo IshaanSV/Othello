@@ -1,9 +1,12 @@
-package Othello;
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+/* Names: Ishaan Varma, Ayowade Owojori
+ * Purpose of this  class: Where everything related to the board is done
+ * Date: 6/13/2022
+ */
 public class BoardPanel extends JPanel {
 	int turn = 1;
 	final int BOARD_HEIGHT = 720;
@@ -125,7 +128,7 @@ public class BoardPanel extends JPanel {
 			for(int j = -1; j <= 1; j++) {
 				boolean thisValid = false;
 				int multiplier = 1;
-				while(board[xIndex+i*multiplier][yIndex+j*multiplier] == oppositePlayer) {//finds a valid path that changes the pieces on the path.
+				while(xIndex+i*multiplier < 8 && yIndex+j*multiplier<8 && xIndex+i*multiplier >=0 && yIndex+j*multiplier>=0 && board[xIndex+i*multiplier][yIndex+j*multiplier] == oppositePlayer) {//finds a valid path that changes the pieces on the path.
 					multiplier++;
 					if(board[xIndex+i*multiplier][yIndex+j*multiplier] == player) {
 						thisValid = true;
@@ -133,7 +136,7 @@ public class BoardPanel extends JPanel {
 					}
 				}
 				multiplier = 1;
-				while(thisValid == true && board[xIndex+i*multiplier][yIndex+j*multiplier] == oppositePlayer) {
+				while(xIndex+i*multiplier < 8 && yIndex+j*multiplier<8 && xIndex+i*multiplier >=0 && yIndex+j*multiplier>=0 && thisValid == true && board[xIndex+i*multiplier][yIndex+j*multiplier] == oppositePlayer) {
 					board[xIndex+i*multiplier][yIndex+j*multiplier] = player;
 					multiplier++;//increments the multiplier
 				}

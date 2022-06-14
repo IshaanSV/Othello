@@ -1,4 +1,3 @@
-package Othello;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -17,6 +16,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
+
+/*Names: Ishaan Varma, Ayowade Owojori
+ *What this class does: This class is where the frame and everythiing in it is created
+ *What this class does cont.: Where the functionality of the buttons and the game is implemented
+ *Date: 6/13/2022
+ */
 
 public class Othello implements ActionListener, MouseListener {
 	JFrame frame = new JFrame();
